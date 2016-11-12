@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/sicter/resturbot#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "^4.13.4",
     "express-validator": "^2.20.3",
     "mongodb": "^2.1.16",
@@ -24,6 +25,7 @@
     "multer": "^1.2.0",
     "multiparty": "^4.1.2",
     "python-shell": "^0.4.0",
+    "request": "^2.78.0",
     "util": "^0.10.3"
   }
 }
