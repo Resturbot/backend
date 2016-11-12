@@ -11,6 +11,11 @@ const add = (pageID, pageName, pageAccessToken) => {
 	}
 }
 
+const get = (pageID) => {
+	return pages[pageID];
+}
+
 module.exports = {
-	add : add
+	add : add,
+	get : get
 }

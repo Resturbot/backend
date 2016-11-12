@@ -1,15 +1,21 @@
 'use strict'
-var mongo_host, mongo_port
+let mongo_host, mongo_port, mongo_address;
 
-if (process.env.MONGO_PORT_27017_TCP_ADDR) {
-	mongo_host = process.env.MONGO_PORT_27017_TCP_ADDR;
-	mongo_port = process.env.MONGO_PORT_27017_TCP_PORT;
+if (process.env.MONGOLAB_ROSE_URI) {
+	mongo_address = process.env.MONGOLAB_ROSE_URI;
+	let doubleSlashIndex = mongo_address.indexOf("//") + 2;
+	let colonIndex = mongo_address.indexOf(":", mongo_address.indexOf(":") + 1);
+
+	mongo_host = mongo_address.substring(doubleSlashIndex,colonIndex);
+	mongo_port = mongo_address.substring(colonIndex+1);
 } else {
-	mongo_host = "localhost";
+	mongo_host = "mongodb://localhost";
 	mongo_port = "27017";
+	mongo_address = mongo_host + ":" + mongo_port;
 }
 
 module.exports = {
-	'mongo_host' : mongo_host,
-	'mongo_port' : mongo_port
+	'mongo_address': mongo_address,
+	'mongo_host': mongo_host,
+	'mongo_port': mongo_port
 }

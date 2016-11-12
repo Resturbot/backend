@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use('', router);
 
-// database.connect();
+database.connect();
 
 // Test null endpoint
 router.get('/', (req, res) => {
@@ -34,7 +34,6 @@ router.get('/', (req, res) => {
 
 // Sign-up a restaurant
 router.post('/api/signup', (req, res) => {
-	  // parse a file upload
     const form = new multiparty.Form();
 
     form.parse(req, (err, fields, files) => {
@@ -71,7 +70,7 @@ router.post('/api/signup', (req, res) => {
 });
 
 // Get the menu
-router.get('/restaurant/:page_id/menu', function (req, res) {
+router.get('/restaurant/:page_id/menu', (req, res) => {
 	const pageID = req.params.page_id;
 
 	database.getOne(pageID).then((result) => {
@@ -85,8 +84,8 @@ router.get('/restaurant/:page_id/menu', function (req, res) {
 	res.sendStatus(200);
 });
 
-// Handle facebook's 'challenge' that that bot is legit
-router.get('/restaurant/:page_id/', function (req, res) {
+// Handle facebook's 'verification' that that bot is legit
+router.get('/restaurant/:page_id/', (req, res) => {
 	if (req.query['hub.verify_token'] === 'test') {
 		console.log(req.query);
       res.send(req.query['hub.challenge']);
@@ -96,14 +95,14 @@ router.get('/restaurant/:page_id/', function (req, res) {
 });
 
 // Handle incoming message
-router.post('/resaurant/:page_id', (req, res) => {
+router.post('/restaurant/:page_id', (req, res) => {
 	// Pull facebook page id from query param
 	const pageID = req.params.id;
 
 	// If pageID is null, ignore the request. Restaurant isn't signed up
 	if(pageID == null) {
 		res.sendStatus(500);
-		return;
+		res.end();
 	}
 
 	var events = req.body.entry[0].messaging;
@@ -111,12 +110,12 @@ router.post('/resaurant/:page_id', (req, res) => {
 	console.log(events);
 	console.log();
 
-	// message_handler.handle(events);
+	message_handler.handle(events, pageID);
     
-    res.sendStatus(200);
+    res.end();
 });
 
-const server = app.listen(port, function() {
+const server = app.listen(port, () => {
   let host = server.address().address
   let port = server.address().port
   console.log("Listening at http://%s:%s\n", host, port)
