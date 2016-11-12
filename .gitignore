@@ -1,0 +1,5 @@
+node_modules
+.*
+practice*
+*config.js
+!.gitignore

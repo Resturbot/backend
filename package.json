@@ -1,0 +1,19 @@
+{
+  "name": "resturbot",
+  "version": "1.0.0",
+  "description": "messenger endpoint",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sicter/resturbot.git"
+  },
+  "author": "Edward Aryee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sicter/resturbot/issues"
+  },
+  "homepage": "https://github.com/sicter/resturbot#readme"
+}
