@@ -65,17 +65,17 @@ router.post('/api/signup', (req, res) => {
 				res.sendStatus(500);
 	     		res.end();	
 		});
-
-
-      // res.end(util.inspect({fields: fields, files: files}));
     });
 });
 
-// Handle facebook's 'challenge' that that bot is legit
+// Get the menu
 router.get('/restaurant/:page_id/menu', function (req, res) {
-	database.getAll(1, 10).then((result) => {
+	const pageID = req.params.page_id;
+
+	database.getOne(pageID).then((result) => {
 		const data = result;
-		console.log(data);
+		console.log(data.menuData);
+		res.write(data.menuData);
 	}, (err) => {
 		console.log(err);
 	});
@@ -84,14 +84,13 @@ router.get('/restaurant/:page_id/menu', function (req, res) {
 });
 
 // Handle facebook's 'challenge' that that bot is legit
-router.get('/restaurant/:page_id/challenge', function (req, res) {
-	if (req.query['hub.verify_token'] === 'req.query') {
+router.get('/restaurant/:page_id/', function (req, res) {
+	if (req.query['hub.verify_token'] === 'test') {
 		console.log(req.query);
       res.send(req.query['hub.challenge']);
    } else {
       res.send('Error, wrong validation token');    
    }
-  return;
 });
 
 // Handle incoming message
@@ -106,7 +105,11 @@ router.post('/resaurant/:page_id', (req, res) => {
 	}
 
 	var events = req.body.entry[0].messaging;
-	message_handler.handle(events);
+	console.log();
+	console.log(events);
+	console.log();
+
+	// message_handler.handle(events);
     
     res.sendStatus(200);
 });

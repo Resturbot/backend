@@ -34,7 +34,6 @@ const updateCache = (pageID, data) => {
         db.open((err, db) => {
             let collection = db.collection(DBcollection);
             // create record, or insert record if it does not exist
-            console.log(collection);
             collection.updateOne({pageID: pageID}, updateData, {upsert:true, w: 1}, 
                 (err, records) => {
                     if (err) {
