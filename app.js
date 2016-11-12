@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use('', router);
 
-database.connect();
+// database.connect();
 
 // Test null endpoint
 router.get('/', (req, res) => {
