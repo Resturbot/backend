@@ -4,8 +4,9 @@ const Wit = require('node-wit').Wit;
 const Logger = require('node-wit').Logger;
 const levels = require('node-wit').logLevels;
 const logger = new Logger(levels.DEBUG);
-const config = require('./config.js');
-const token = config.wit_token;
+// const config = require('./wit_config.js');
+// const token = config.wit_token;
+const token = 1234356; // temporary random token to avoid using config
 const context = {};
 
 const actions = {
