@@ -12,12 +12,15 @@ const handle = (events) => {
 
         	// Handle message depending on what type of message it is.
         	// TODO: finish this
-        	switch() {
+            var temp_message_type = null;
+        	switch(temp_message_type) {
         		default: 
+                    break;
 
-        		wit.botMessage(event.message);
+        		// wit.botMessage(event.message);
         	}
-            messenger.sendMessage(event.sender.id, {text: `Location is ${botMessage}`});
+            
+            sendMessage(event.sender.id, {text: `Location is ${botMessage}`});
         }
     }
 }
@@ -61,9 +64,6 @@ const sendMessage = (recipientId, message, pageID) => {
 
 module.exports = {
     startMessage: startMessage,
-    sendMessage: sendMessage
-}
-
-module.exports = {
+    sendMessage: sendMessage,
 	handle: handle
 }

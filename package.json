@@ -2,7 +2,7 @@
   "name": "resturbot",
   "version": "1.0.0",
   "description": "messenger endpoint",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/sicter/resturbot/issues"
   },
-  "homepage": "https://github.com/sicter/resturbot#readme"
+  "homepage": "https://github.com/sicter/resturbot#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "express-validator": "^2.20.3",
+    "mongodb": "^2.1.16",
+    "mongoose": "^4.4.12",
+    "multer": "^1.2.0",
+    "multiparty": "^4.1.2",
+    "python-shell": "^0.4.0",
+    "util": "^0.10.3"
+  }
 }

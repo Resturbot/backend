@@ -1,1 +1,1 @@
-actions.js
+'use strict';

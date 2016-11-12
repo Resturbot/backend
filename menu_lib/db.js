@@ -1,13 +1,12 @@
 'use strict'
 
-const fs       = require("fs-extra");
 const mongoose = require('mongoose');
 const Db       = require('mongodb').Db;
 const Server   = require('mongodb').Server;
 
-const config   = require('../config.js');
+const config   = require('./db_config.js');
 
-const URLcollection = "restaurants";
+const DBcollection = "restaurants";
 let mongoServer, mongoPort;
 
 const connect = () => {
@@ -23,20 +22,20 @@ const connect = () => {
     console.log('Connected to mongoDB: ', mongoServer);
 }
 
-const updateCache = (page, data) => {
+const updateCache = (pageID, data) => {
     return new Promise((resolve, reject) => {
         // Establish connection to db
         let updateData = data;
         let d = new Date();
         updateData.updated = d;
-        updateData.url = url;
+        updateData.pageID = pageID;
 
-        let db = new Db('test', new Server(config.mongo_host, config.mongo_port));
-
+        let db = new Db('restaurants', new Server(config.mongo_host, config.mongo_port));
         db.open((err, db) => {
-            let collection = db.collection(URLcollection);
+            let collection = db.collection(DBcollection);
             // create record, or insert record if it does not exist
-            collection.updateOne({url: url}, updateData, {upsert:true, w: 1}, 
+            console.log(collection);
+            collection.updateOne({pageID: pageID}, updateData, {upsert:true, w: 1}, 
                 (err, records) => {
                     if (err) {
                       db.close();
@@ -51,13 +50,13 @@ const updateCache = (page, data) => {
     })
 }
 
-const checkCache = (url) => {
+const getOne = (pageID) => {
     return new Promise((resolve, reject) => {
         // Establish connection to db
-        let db = new Db('test', new Server(config.mongo_host, config.mongo_port));
+        let db = new Db('restaurants', new Server(config.mongo_host, config.mongo_port));
         db.open((err, db) => {
-            let collection = db.collection(URLcollection);
-            collection.findOne({url:url}, {'url': 0, '_id':0}, 
+            let collection = db.collection(DBcollection);
+            collection.findOne({pageID:pageID}, {'pageID': 0, '_id':0}, 
                 (err, records) => {
                     if (err) {
                         db.close();
@@ -76,7 +75,7 @@ const getAll = (page, size) => {
         // Establish connection to db
         let db = new Db('test', new Server(config.mongo_host, config.mongo_port));
         db.open((err, db) => {
-            let collection = db.collection(URLcollection);
+            let collection = db.collection(DBcollection);
 
             if (err) {
                 reject(dbConnectError);
@@ -84,7 +83,7 @@ const getAll = (page, size) => {
                 let dbpage = page - 1; // Default page is 1,but query to db starts at 0
                 let skip = dbpage * size;
                 let limit = size;
-                collection.find({}, {'url': 0, '_id':0, 'updated':0}).skip(skip).limit(limit).toArray(
+                collection.find({}, {'_id':0, 'updated':0}).skip(skip).limit(limit).toArray(
                     (err, docs) => {
                         if (!err) {
 
@@ -119,19 +118,19 @@ const getAll = (page, size) => {
     })
 }
 
-const getAll = () => {
+const listRestaurants = () => {
     return new Promise(function(resolve, reject) {
         // Establish connection to db
         let db = new Db('test', new Server(config.mongo_host, config.mongo_port));
         db.open(function(err, db) {
-            var collection = db.collection(URLcollection);
+            var collection = db.collection(DBcollection);
 
             if (err) {
                 console.log("Couldnt actually open db");
                 reject(err);
             } else {
                 // Peform a simple find and return all the documents
-                collection.find({}, {'url': 1, '_id':0}).toArray(
+                collection.find({}, {'pageID': 1, '_id':0}).toArray(
                     (err, docs) => {
                       if (!err) {
                           db.close();
@@ -148,9 +147,9 @@ const getAll = () => {
 
 
 module.exports = {
-    checkCache: checkCache,
+    getOne: getOne,
     updateCache: updateCache,
-    cleanTemp: cleanTempFiles,
     getAll: getAll,
+    listRestaurants: listRestaurants,
     connect: connect
 }
