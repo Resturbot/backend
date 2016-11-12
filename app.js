@@ -40,7 +40,7 @@ router.post('/api/signup', (req, res) => {
     	const imagePath = files.upload[0].path;
     	const menuData = menu_converter.convert(imagePath);
 
-    	const pageID = fields.pageID;
+    	const pageID = fields.pageID[0];
     	const pageToken = fields.pageToken[0];
     	const pageName = fields.pageName[0];
 
@@ -53,7 +53,7 @@ router.post('/api/signup', (req, res) => {
 			menuData: menuData
 		};
 
-		database.updateCache(pageID, data).then(
+		database.updateData(pageID, data).then(
 			(result) => {
 		      	res.writeHead(200, {'content-type': 'text/plain'});
 		      	console.log(`Stored ${pageName}`);
@@ -69,21 +69,6 @@ router.post('/api/signup', (req, res) => {
     });
 });
 
-// Get the menu
-router.get('/restaurant/:page_id/menu', (req, res) => {
-	const pageID = req.params.page_id;
-
-	database.getOne(pageID).then((result) => {
-		const data = result;
-		console.log(data.menuData);
-		res.write(data.menuData);
-	}, (err) => {
-		console.log(err);
-	});
-
-	res.sendStatus(200);
-});
-
 // Handle facebook's 'verification' that that bot is legit
 router.get('/restaurant/:page_id/', (req, res) => {
 	if (req.query['hub.verify_token'] === 'test') {
@@ -94,14 +79,14 @@ router.get('/restaurant/:page_id/', (req, res) => {
    }
 });
 
-// Handle incoming message
+// Handle incoming messagea
 router.post('/restaurant/:page_id', (req, res) => {
 	// Pull facebook page id from query param
-	const pageID = req.params.id;
-
+	const pageID = req.params.page_id;
+	console.log(pageID);
 	// If pageID is null, ignore the request. Restaurant isn't signed up
 	if(pageID == null) {
-		res.sendStatus(500);
+		res.sendStatus(201);
 		res.end();
 	}
 

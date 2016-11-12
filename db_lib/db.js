@@ -2,8 +2,6 @@
 
 const mongoose = require('mongoose');
 const mongodb = require('mongodb');
-const Db       = require('mongodb').Db;
-const Server   = require('mongodb').Server;
 
 const config   = require('./db_config.js');
 
@@ -26,7 +24,7 @@ const connect = () => {
   console.log("Database connection ready: ", config.mongo_address);
 }
 
-const updateCache = (pageID, data) => {
+const updateData = (pageID, data) => {
     return new Promise((resolve, reject) => {
         // Establish connection to db
         let updateData = data;
@@ -37,10 +35,8 @@ const updateCache = (pageID, data) => {
         db.collection(DBcollection).updateOne({pageID: pageID}, updateData, {upsert:true, w: 1}, 
             (err, records) => {
                 if (err) {
-                  db.close();
                   reject(err);
                 } else {
-                  db.close();
                   resolve();
                 }
         });
@@ -48,15 +44,53 @@ const updateCache = (pageID, data) => {
     });
 }
 
-const getOne = (pageID) => {
+const getAccessToken = (pageID) => {
     return new Promise((resolve, reject) => {
-        db.collection.findOne({pageID:pageID}, {'pageID': 0, '_id':0}, 
+        const fields = {'pageToken': 1, '_id':0};
+        getSpecificData(pageID, fields).then((result) => {
+            resolve(result.pageToken);
+        }, (err) => {
+            console.log(err);
+            //handle err
+            reject(err);
+        });
+    });
+}
+
+const getMenu = (pageID) => {
+    return new Promise((resolve, reject) => {
+        const fields = {'menu': 1, '_id':0};
+        getSpecificData(pageID, fields).then((result) =>{
+            resolve(result.menu);
+        }, (err) => {
+            console.log(err);
+            //handle err
+        });
+    });
+}
+
+const getPageData = (pageID) => {
+    return new Promise((resolve, reject) => {
+        db.collection(DBcollection).findOne({pageID:pageID}, {'_id' : 0}, 
             (err, records) => {
                 if (err) {
                     db.close();
                     reject(err);
                 } else {
                     db.close();
+                    resolve(records);
+                }
+        });                      
+    });
+}
+
+const getSpecificData = (pageID, fields) => {
+    return new Promise((resolve, reject) => {
+        db.collection(DBcollection).findOne({pageID:pageID}, fields, 
+            (err, records) => {
+                if (err) {
+                    reject(err);
+                } else {
                     resolve(records);
                 }
         });                      
@@ -90,10 +124,8 @@ const getAll = (page, size) => {
                         };
 
                         resolve(returnDict);
-                        db.close();
                     });
                 } else {
-                    db.close();
                     console.log("Get all error: ", err)
                     reject(err);
                 }
@@ -104,24 +136,23 @@ const getAll = (page, size) => {
 const listRestaurants = () => {
     return new Promise(function(resolve, reject) {
         // Establish connection to db
-        db.collection(DBcollection).find({}, {'pageID': 1, '_id':0}).toArray(
+        db.collection(DBcollection).find({}, {'pageID': 1, 'accessToken': 1,'_id':0}).toArray(
             (err, docs) => {
               if (!err) {
-                  db.close();
                   resolve(docs);
               } else {
-                  db.close();
                   reject(err);
               }
         });
     });
 }
 
-
 module.exports = {
-    getOne: getOne,
-    updateCache: updateCache,
+    connect: connect,
+    updateData: updateData,
+    getAccessToken : getAccessToken,
+    getMenu : getMenu,
+    getPageData : getPageData,
     getAll: getAll,
     listRestaurants: listRestaurants,
-    connect: connect
 }
