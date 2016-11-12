@@ -23,20 +23,19 @@ const actions = {
 
 const client = new Wit(token, actions, logger);
 
-const message_wit  = (message) => {
+const message_wit_get_data  = (message) => {
   client.message(message, {}, (error, data) => {
     if (error) {
       console.log('Oops! Got an error: ' + error);
       return "Try a different question."
     } else {
       console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
-      let message = data.entities.location.value;
-      return JSON.stringify(message);
+      return data;
     }
   });
 }
 
 module.exports = {
   wit : client,
-  botMessage : message_wit
+  botMessage : message_wit_get_data
 }
