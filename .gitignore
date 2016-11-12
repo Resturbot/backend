@@ -3,4 +3,5 @@ node_modules
 practice*
 *config.js
 !mess_lib/messenger_config.js
+!db_lib/db_config.js
 !.gitignore

@@ -10,7 +10,8 @@ const util = require('util');
 const messenger_config = require('./mess_lib/messenger_config.js');
 const message_handler = require('./mess_lib/message_handler.js');
 
-const database  = require('./menu_lib/db.js');
+const database  = require('./db_lib/db.js');
+
 const menu_converter = require('./menu_lib/menu_converter.js');
 
 const app    = express();
