@@ -1,0 +1,101 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation for Sites</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-12 columns">
+        <h1>Welcome to ResturBot!</h1>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="callout">
+          <h3>We&rsquo;re stoked you want to try ResturBot! </h3>
+          <p>Our goal is to help you improve client aquisition and accessibility so that you can continue your focus on running your bussiness!</p>
+          <div class="row">
+            <div class="large-push-1 columns">
+              <p><a href="https://blog.hartleybrody.com/wp-content/uploads/2016/06/create-fb-app-1024x604.png">Step 1: App ID</a><br />Go to the Facebook Developer’s Quickstart Page and click “Skip and Create App ID” <br> at the top right. Then create a new Facebook App for your bot and give your app a <br> name, category and contact email.</p>
+              <div class = "img">
+              <img src="https://blog.hartleybrody.com/wp-content/uploads/2016/06/create-fb-app-1024x604.png" alt="Smiley face" height="280" width="280">
+
+              </div>
+            </div>
+
+
+            <div class="large-push-1 columns">
+              <p align-justify><a href="https://blog.hartleybrody.com/wp-content/uploads/2016/06/setup-fb-messenger-app-1024x613.png">Step 2: Choose messenger</a><br />You’ll see your new App ID at the top right on the next page. Scroll down and click <br> “Get Started” next to Messenger.</p>
+            <div class = "img">
+            <img src="https://blog.hartleybrody.com/wp-content/uploads/2016/06/setup-fb-messenger-app-1024x613.png" alt="Smiley face" height="280" width="280">
+            </div>
+          </div>
+
+          <div class="large-push-1 columns">
+            <p><a href="https://blog.hartleybrody.com/wp-content/uploads/2016/06/page-access-token-generation-1024x346.png">Step 3: Generate a Page Access Token</a><br /> Go  to  Messenger  settings for your Facebook App.  Using the Page you created <br> earlier (or an existing Page), click through the auth flow and you’ll receive a <br>  Page Access Token for your app.</p>
+            <div class = "img">
+            <img src="https://blog.hartleybrody.com/wp-content/uploads/2016/06/page-access-token-generation-1024x346.png" alt="Smiley face" height="280" width="280">
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+        <hr />
+
+      <form action="https://resturbot.herokuapp.com/api/signup" method="post" enctype="multipart/form-data">
+        <h5>Follow the steps above and complete the form below:</h5>
+        <form>
+          <div class="row">
+            <div class="large-12 columns">
+              <label>Page ID (In "https://www.facebook.com/TestPage-577182589143189/" it is 577182589143189)</label>
+              <input type="text" name= "pageID" placeholder="APP ID" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="large-4 medium-4 columns">
+              <label>Page Access Token</label>
+              <input type="text" name= "pageToken" placeholder="Page Access Token" />
+            </div>
+            <div class="large-4 medium-4 columns">
+              <label>Name of your page?</label>
+              <input type="text" name= "pageName" placeholder="large-4.columns" />
+            </div>
+            <div class="large-4 medium-4 columns">
+              <div class="row collapse">
+                <label>Your Phone Number</label>
+                <div class="input-group">
+                  <input type="text" placeholder="small-9.columns" class="input-group-field" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="file" name="datafile" >
+          <input type="submit" value="Submit">
+        </form>
+
+
+       <div class="large-push-1 columns">
+              <p align-justify><a href="https://blog.hartleybrody.com/wp-content/uploads/2016/06/setup-webhook-annotated-1024x491.png">Step 5: Enter Webhook and Ver</a><br />${ENTER HERE}</p>
+            <div class = "img">
+            <img src="https://blog.hartleybrody.com/wp-content/uploads/2016/06/setup-webhook-annotated-1024x491.png" alt="Smiley face" height="280" width="280">
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

@@ -19,7 +19,7 @@ const startMessage = (message, pageID) => {
     database.getAccessToken(pageID).then((accessToken) => {
         request({
             url: 'https://graph.facebook.com/v2.6/240673306291555/thread_settings',
-            qs: {access_token: accessToken},
+            qs: {access_token: encodeURIComponent(accessToken)},
             method: 'POST',
             json: {
                 message: message,
@@ -38,12 +38,12 @@ const startMessage = (message, pageID) => {
 
 // TODO switch out process.env.PAGE_ACCESS_TOKEN with config.get[pageID]
 const sendMessage = (recipientId, message, pageID) => {
-    console.log(`PageID: ${pageID}`);
+    // console.log(`PageID: ${pageID}`);
     database.getAccessToken(pageID).then((accessToken) => {
-        console.log(`Access Token: ${accessToken}`);
+        // console.log(`Access Token: ${accessToken}`);
         request({
             url: 'https://graph.facebook.com/v2.6/me/messages',
-            qs: {access_token: accessToken},
+            qs: {access_token: encodeURIComponent(accessToken)},
             method: 'POST',
             json: {
                 recipient: {id: recipientId},

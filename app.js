@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const url           = require('url');
 const multiparty = require('multiparty');
 const util = require('util');
+const fs = require('fs');
 
 const messenger_config = require('./mess_lib/messenger_config.js');
 const message_handler = require('./mess_lib/message_handler.js');
@@ -37,7 +38,10 @@ router.post('/api/signup', (req, res) => {
     const form = new multiparty.Form();
 
     form.parse(req, (err, fields, files) => {
-    	const imagePath = files.upload[0].path;
+    	console.log(files);
+    	console.log(fields);
+
+    	const imagePath = files.datafile[0].path;
     	const menuData = menu_converter.convert(imagePath);
 
     	const pageID = fields.pageID[0];
@@ -55,10 +59,21 @@ router.post('/api/signup', (req, res) => {
 
 		database.updateData(pageID, data).then(
 			(result) => {
-		      	res.writeHead(200, {'content-type': 'text/plain'});
-		      	console.log(`Stored ${pageName}`);
-		      	res.write('Success:\n\n');
-	     		res.end();
+				fs.readFile('./signup-return.html',"utf-8", function (err, html) {
+				    if (err) {
+				        throw err; 
+				    }
+				    console.log(html);
+				    
+				    const webhook = `https://resturbot.herokuapp.com/restaurant/${pageToken}`;
+				    const verify_token = `resturbot-${pageID}`;
+				    html = html.replace('${ENTER HERE}', `Webhook: ${webhook}\n Verfy Token: ${verify_token}`);
+				
+				    res.writeHead(200, {'content-type': 'text/html'});
+			      	console.log(`Stored ${pageName}`);
+			      	res.write(html);
+		     		res.end();
+				});
 			}, 
 			(err) => {
 				console.log("Failed to store restaurant");
@@ -71,8 +86,9 @@ router.post('/api/signup', (req, res) => {
 
 // Handle facebook's 'verification' that that bot is legit
 router.get('/restaurant/:page_id/', (req, res) => {
-	if (req.query['hub.verify_token'] === 'test') {
-		console.log(req.query);
+	const pageID = req.params.page_id;
+	if (req.query['hub.verify_token'] === `resturbot-${pageID}`) {
+		// console.log(req.query);
       res.send(req.query['hub.challenge']);
    } else {
       res.send('Error, wrong validation token');    
@@ -83,7 +99,7 @@ router.get('/restaurant/:page_id/', (req, res) => {
 router.post('/restaurant/:page_id', (req, res) => {
 	// Pull facebook page id from query param
 	const pageID = req.params.page_id;
-	console.log(pageID);
+
 	// If pageID is null, ignore the request. Restaurant isn't signed up
 	if(pageID == null) {
 		res.sendStatus(201);
